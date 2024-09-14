@@ -1,0 +1,2 @@
+# MoonLight_Secure_Project
+ MoonLight_Secure_Project is a new, innovative approach to web security that aims to provide simple yet effective methods for authenticating user requests and preventing unauthorized access. This project explores the idea of using dynamic tokens and encryption to enhance the security of web forms and data transmission without relying on external authentication services. Join us in creating a more secure and accessible digital environment!
