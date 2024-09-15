@@ -3,9 +3,9 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $aibui = $_POST['aibui'];
-    $tolkn = $_POST['109n'];
+    $token = $_POST['109n'];
 
-    if ($tolkn !== $_SESSION['tolkn'] || $aibui !== $_SESSION['aibui']) {
+    if ($token !== $_SESSION['token'] || $aibui !== $_SESSION['aibui']) {
         die('NG');
     }
 }
@@ -18,5 +18,5 @@ $iv_hex = bin2hex($iv);
 $encoded_uuid = base64_encode($encrypted_uuid);
 
 $_SESSION['aibui'] = $iv_hex;
-$_SESSION['tolkn'] = $encoded_uuid;
+$_SESSION['token'] = $encoded_uuid;
 ?>
