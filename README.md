@@ -46,15 +46,18 @@ An encryption key is retrieved from the environment variables ($encryption_key).
 An initialization vector ($iv) is generated with random_bytes(16). It is required for the AES-256-CBC encryption method to ensure that even if the same data is encrypted multiple times, the output will be different.
 The UUID is then encrypted with the AES-256-CBC encryption algorithm, using the encryption key and IV (openssl_encrypt()).
 The encrypted UUID is encoded in Base64 ($encoded_uuid) for safe transmission.
-Form Submission Handling:
+
+2. **Form Submission Handling**
 
 When the form is submitted ($_SERVER['REQUEST_METHOD'] === 'POST'), the code retrieves the values submitted in the form, including the encrypted UUID (109n) and IV (aibui).
 It then decodes the received encrypted UUID and decrypts it to verify that it matches the original session-stored UUID ($_SESSION['tolkn']).
 If the decrypted UUID or IV does not match the session-stored values, the submission is considered invalid, and an "NG" (No Good) message is displayed.
-Session Variable Updates:
+
+3 **Session Variable Updates**
 
 Before the form is displayed, new tokens ($encoded_uuid) and IV ($iv_hex) are generated and stored in the session. This ensures that every form display has fresh tokens and IV, preventing replay attacks or form duplication.
-HTML Form with Hidden Fields:
+
+4. **HTML Form with Hidden Fields**
 
 The form includes hidden fields (109n and aibui) that hold the encrypted UUID and IV values. These hidden fields are sent with the form when the user submits it. Upon submission, these values are validated against the session data to ensure authenticity.
 Summary
