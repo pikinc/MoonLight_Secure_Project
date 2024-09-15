@@ -92,10 +92,24 @@ $_SESSION['token'] = $encoded_uuid;
 
 Before the form is displayed, new tokens ($encoded_uuid) and IV ($iv_hex) are generated and stored in the session. This ensures that every form display has fresh tokens and IV, preventing replay attacks or form duplication.
 
-5. **HTML Form with Hidden Fields**
+### HTML Form with Hidden Fields
 
-The form includes hidden fields (109n and aibui) that hold the encrypted UUID and IV values. These hidden fields are sent with the form when the user submits it. Upon submission, these values are validated against the session data to ensure authenticity.
-Summary
+The form includes hidden fields (`109n` and `aibui`) that hold the encrypted UUID and IV values. These hidden fields are sent with the form when the user submits it. Upon submission, these values are validated against the session data to ensure authenticity.
+
+Here's an example of how the HTML form is structured:
+
+```html
+<form method="POST">
+    <input type="hidden" name="109n" value="<?=$encoded_uuid?>" />
+    <input type="hidden" name="aibui" value="<?=$iv_hex?>" />
+    <div class="form-group">
+        <label for="somthing">somthing</label>
+        <input type="text" id="somthing" name="somthing" value=""/>
+    </div>
+    <button>SEND</button>
+</form>
+```
+
+## Summary
+
 This approach ensures that each form submission is unique and validated using dynamically generated tokens and IVs, providing robust protection against CSRF (Cross-Site Request Forgery) attacks and other unauthorized access attempts. The session data is continually updated to keep all communications secure and valid.
-
-By understanding this method, developers can enhance the security of their web forms and protect against various forms of web attacks.
