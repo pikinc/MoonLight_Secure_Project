@@ -8,20 +8,18 @@
 <title></title>
 </head>
 <body>
-<main>
-<div class="inner">
-<form method="POST">
-<input type="hidden" name="109n" value="<?=$encoded_uuid?>" />
-<input type="hidden" name="aibui" value="<?=$iv_hex?>" />
-<div class="form-group">
-<label for="somthing">somthing</label>
-<input type="text" id="somthing" name="somthing" value=""/>
-</div>
-<button>SEND</button>
-</form>
-</div>
-</section>
-</div>
-</main>
+  <main>
+    <div class="inner">
+      <form method="POST">
+      <input type="hidden" name="109n" value="<?=$encoded_uuid?>" />
+      <input type="hidden" name="aibui" value="<?=$iv_hex?>" />
+        <div class="form-group">
+          <label for="somthing">somthing</label>
+          <input type="text" id="somthing" name="somthing" value=""/>
+        </div>
+      <button>SEND</button>
+      </form>
+    </div>
+  </main>
 </body>
 </html>
