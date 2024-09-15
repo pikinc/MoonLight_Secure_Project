@@ -58,6 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    フォームがPOSTメソッドで送信された場合、`$_POST`から`aibui`（初期化ベクトル）と`109n`（トークン）を取得します。フォームから送信されたトークンとセッションに保存されたトークン、または送信されたIVとセッションに保存されたIVが一致しない場合、スクリプトを終了し、「NG」（No Good）を表示します。これにより、不正なリクエストがブロックされます。
 
 3. **トークンとIVの生成**
+```php
+$form_uuid = bin2hex(random_bytes(16));
+$encryption_key = getenv('ENCRYPTION_KEY');
+$iv = random_bytes(16);
+$encrypted_uuid = openssl_encrypt($form_uuid, 'aes-256-cbc', $encryption_key, 0, $iv);
+$iv_hex = bin2hex($iv);
+$encoded_uuid = base64_encode($encrypted_uuid);
+```
 
    - `bin2hex(random_bytes(16))`でランダムなUUID（ユニークな識別子）を生成します。このUUIDは、各フォームリクエストが一意であることを保証するために使用されます。
    - 環境変数から暗号化キー（`$encryption_key`）を取得し、UUIDの暗号化に使用します。
@@ -66,7 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    - 暗号化されたUUIDはBase64でエンコードされ（`$encoded_uuid`）、安全に送信されるようになります。
 
 4. **セッション変数の更新**
-
+```php
+$_SESSION['aibui'] = $iv_hex;
+$_SESSION['token'] = $encoded_uuid;
+```
    新しいトークンとIVをセッション変数として保存します。これにより、次のフォーム表示時に新しいトークンとIVが生成され、リプレイ攻撃やフォームの複製を防ぎます。
 
 ### まとめ
