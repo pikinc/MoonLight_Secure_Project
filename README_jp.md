@@ -44,6 +44,17 @@ session_start();
 
 2. **フォーム送信の検証**
 
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $aibui = $_POST['aibui'];
+    $token = $_POST['109n'];
+
+    if ($token !== $_SESSION['token'] || $aibui !== $_SESSION['aibui']) {
+        die('NG');
+    }
+}
+```
+
    フォームがPOSTメソッドで送信された場合、`$_POST`から`aibui`（初期化ベクトル）と`109n`（トークン）を取得します。フォームから送信されたトークンとセッションに保存されたトークン、または送信されたIVとセッションに保存されたIVが一致しない場合、スクリプトを終了し、「NG」（No Good）を表示します。これにより、不正なリクエストがブロックされます。
 
 3. **トークンとIVの生成**
