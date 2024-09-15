@@ -1,12 +1,39 @@
 # MoonLight_Secure_Project
- MoonLight_Secure_Project is a new, innovative approach to web security that aims to provide simple yet effective methods for authenticating user requests and preventing unauthorized access. This project explores the idea of using dynamic tokens and encryption to enhance the security of web forms and data transmission without relying on external authentication services. Join us in creating a more secure and accessible digital environment!
 
-# 109n Secure Trick
-This project, known as "109n Secure Trick", presents a new and innovative approach to web security...
+MoonLight_Secure_Project is an innovative approach to web security that aims to provide simple yet effective methods for authenticating user requests and preventing unauthorized access. This project focuses on using dynamic tokens and encryption to enhance the security of web forms and data transmission without relying on external authentication services. Join us in creating a safer and more accessible digital environment!
 
-Explanation of the Code
-This PHP code is designed to secure a web form submission by generating unique tokens and initial vectors (IV) for each request, ensuring that every form submission is legitimate and originates from the correct source.
+## 109n Secure Trick
 
+The "109n Secure Trick" project introduces a new and innovative approach to web security. This approach protects web form submissions by generating unique tokens and initialization vectors (IVs) for each request, ensuring that every form submission is legitimate and originates from a valid source.
+
+### Code Explanation
+
+The following PHP code is a basic implementation to secure form submissions.
+
+```php
+<?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $aibui = $_POST['aibui'];
+    $token = $_POST['109n'];
+
+    if ($token !== $_SESSION['token'] || $aibui !== $_SESSION['aibui']) {
+        die('NG');
+    }
+}
+
+$form_uuid = bin2hex(random_bytes(16));
+$encryption_key = getenv('ENCRYPTION_KEY');
+$iv = random_bytes(16);
+$encrypted_uuid = openssl_encrypt($form_uuid, 'aes-256-cbc', $encryption_key, 0, $iv);
+$iv_hex = bin2hex($iv);
+$encoded_uuid = base64_encode($encrypted_uuid);
+
+$_SESSION['aibui'] = $iv_hex;
+$_SESSION['token'] = $encoded_uuid;
+?>
+```
 Session Initialization:
 
 The code starts with session_start() to initiate a session. This allows the server to store and manage data across multiple page requests for each user session.
