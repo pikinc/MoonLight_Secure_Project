@@ -34,7 +34,9 @@ $_SESSION['aibui'] = $iv_hex;
 $_SESSION['token'] = $encoded_uuid;
 ?>
 ```
-## Session Initialization:
+
+## Detailed Code Explanation
+### Session Initialization:
 
 The code starts with session_start() to initiate a session. This allows the server to store and manage data across multiple page requests for each user session.
 Token and IV Generation:
