@@ -33,6 +33,7 @@ $encoded_uuid = base64_encode($encrypted_uuid);
 $_SESSION['aibui'] = $iv_hex;
 $_SESSION['token'] = $encoded_uuid;
 ?>
+```
 #### コードの詳細解説
 
 1. **セッションの開始**
