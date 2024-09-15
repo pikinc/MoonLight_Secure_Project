@@ -38,6 +38,10 @@ $_SESSION['token'] = $encoded_uuid;
 ## Detailed Code Explanation
 1. **Session Initialization**
 
+```php
+session_start();
+```
+
 The code starts with session_start() to initiate a session. This allows the server to store and manage data across multiple page requests for each user session.
 Token and IV Generation:
 
@@ -49,15 +53,46 @@ The encrypted UUID is encoded in Base64 ($encoded_uuid) for safe transmission.
 
 2. **Form Submission Handling**
 
-When the form is submitted ($_SERVER['REQUEST_METHOD'] === 'POST'), the code retrieves the values submitted in the form, including the encrypted UUID (109n) and IV (aibui).
-It then decodes the received encrypted UUID and decrypts it to verify that it matches the original session-stored UUID ($_SESSION['tolkn']).
-If the decrypted UUID or IV does not match the session-stored values, the submission is considered invalid, and an "NG" (No Good) message is displayed.
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $aibui = $_POST['aibui'];
+    $token = $_POST['109n'];
 
-3 **Session Variable Updates**
+    if ($token !== $_SESSION['token'] || $aibui !== $_SESSION['aibui']) {
+        die('NG');
+    }
+}
+```
+
+When the form is submitted via the POST method, it retrieves aibui (initialization vector) and 109n (token) from $_POST. If the submitted token does not match the token stored in the session, or if the submitted IV does not match the IV stored in the session, the script terminates and displays "NG" (No Good). This blocks any unauthorized requests.
+
+
+3 **Token and IV Generation**
+```php
+$form_uuid = bin2hex(random_bytes(16));
+$encryption_key = getenv('ENCRYPTION_KEY');
+$iv = random_bytes(16);
+$encrypted_uuid = openssl_encrypt($form_uuid, 'aes-256-cbc', $encryption_key, 0, $iv);
+$iv_hex = bin2hex($iv);
+$encoded_uuid = base64_encode($encrypted_uuid);
+```
+
+- Generates a random UUID (Unique Identifier) using `bin2hex(random_bytes(16))`. This UUID ensures that each form request is unique.
+- Retrieves the encryption key (`$encryption_key`) from environment variables, which is used to encrypt the UUID.
+- Generates an Initialization Vector (`$iv`) with random bytes. The IV is required for the AES-256-CBC encryption method, ensuring that even if the same data is encrypted multiple times, the output will be different.
+- Uses `openssl_encrypt()` to encrypt the UUID with the AES-256-CBC algorithm. The encryption key and IV are used in this process.
+- The encrypted UUID is encoded in Base64 (`$encoded_uuid`) for safe transmission.
+
+
+4 **Session Variable Updates**
+```php
+$_SESSION['aibui'] = $iv_hex;
+$_SESSION['token'] = $encoded_uuid;
+```
 
 Before the form is displayed, new tokens ($encoded_uuid) and IV ($iv_hex) are generated and stored in the session. This ensures that every form display has fresh tokens and IV, preventing replay attacks or form duplication.
 
-4. **HTML Form with Hidden Fields**
+5. **HTML Form with Hidden Fields**
 
 The form includes hidden fields (109n and aibui) that hold the encrypted UUID and IV values. These hidden fields are sent with the form when the user submits it. Upon submission, these values are validated against the session data to ensure authenticity.
 Summary
